@@ -18,6 +18,9 @@ public class HomeActivity extends RxBaseActivity<IPsersenter> {
 
     }
 
+    /**
+     * 初始化
+     */
     @Override
     public void initView() {
 

@@ -3,6 +3,8 @@ package com.zzq.zzq_collapsing_demo_master.utils;
 import android.app.ProgressDialog;
 import android.content.Context;
 
+import com.zzq.zzq_collapsing_demo_master.R;
+
 /**
  * 加载数据dialog ProgressDialogUtil.java
  *
@@ -19,6 +21,7 @@ public class ProgressDialogUtil {
         dialog.setMessage("加载中。。。");
         // dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
+        dialog.setProgressStyle(R.color.colorPrimary);
         dialog.show();
         return dialog;
     }

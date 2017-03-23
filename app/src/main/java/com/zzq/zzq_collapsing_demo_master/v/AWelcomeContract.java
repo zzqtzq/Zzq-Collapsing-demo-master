@@ -1,25 +1,25 @@
 package com.zzq.zzq_collapsing_demo_master.v;
 
-import com.zzq.zzq_collapsing_demo_master.entity.WelfareEntity;
 import com.zzq.zzq_collapsing_demo_master.p.IPsersenter;
 
 /**
- * Created by 志强 on 2017.3.8.
+ * Created by 志强 on 2017.3.22.
  */
 
-public interface AHomeContract {
+public interface AWelcomeContract {
     /**
      * 网络请求返回结果
      */
     interface View extends IView {
-        void getHomeResult(WelfareEntity mWelfareEntity);
+        void getWelcomeResult(String result);
+
+        void showGirl();
     }
 
     /**
-     * 发送网络请求
+     * 发送网路请求
      */
     interface Psersenter extends IPsersenter {
-        void sendHomeResult(int pageSize, int page);
-
+        void sendWelcomeRequest(int page, int pageSize);
     }
 }

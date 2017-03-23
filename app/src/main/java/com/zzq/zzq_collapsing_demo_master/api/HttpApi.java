@@ -27,7 +27,8 @@ public interface HttpApi {
     @GET("data/福利/{pageSize}/{page}")
     rx.Observable<WelfareEntity> getHomeResult(@Path("pageSize") int pageSize, @Path("page") int page);
 
-
+    @GET("data/福利/{pageSize}/{page}")
+    rx.Observable<WelfareEntity> getWelcomeGirl(@Path("pageSize") int pageSize,@Path("page") int page);
 //    rx.Observable<ApiResponse<HomeEntity>> getHomeInfo(@Query("loginUserId") Long loginUserId);
 
     /**

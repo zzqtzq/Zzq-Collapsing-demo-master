@@ -36,6 +36,9 @@ public abstract class RxBaseActivity<T extends IPsersenter> extends AppCompatAct
         unbinder = ButterKnife.bind(this);
         mActivity = this;
         mPersenter = getPersenter();
+//        initView();
+//        initVariables();
+//        initDataAndLoadData();
         getWindow().getDecorView().post(() -> mHandler.post(mLoadingRunnable));
     }
 

@@ -7,8 +7,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -35,6 +38,7 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ACache aCache;
     boolean isLoading;
+    private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +152,6 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
                 mRecyclerView.setAdapter(myHomeAdapter);
             } else {
                 //如果是加载  最新获取的数据+最新一次加载的数据
-//                MyToast.showToast(mActivity, "执行getHomeResult返回方法,加载更多方法方法" + mWelfareEntity.getResults().size());
                 if (mWelfareEntity.getResults().size() > 0) {
                     resultsBeenList.addAll(mWelfareEntity.getResults());
                     myHomeAdapter.notifyDataSetChanged();
@@ -160,6 +163,13 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
                 }
             }
 
+            myHomeAdapter.setOnMyHomeRcViewItemOnClickListener(new MyHomeAdapter.OnMyHomeRcViewItemOnClickListener() {
+                @Override
+                public void onMHRCViewItemOnclick(View view, String data, int position) {
+                    Log.i("", "回调结果:" + data + "|||=" + position);
+                    Toast.makeText(mActivity, "" + position, Toast.LENGTH_SHORT).show();
+                }
+            });
 //            try {
 //                WelfareEntity str = (WelfareEntity) aCache.getAsObject("mWelfareEntity");
 //                Log.i("", "1========>" + str);
@@ -223,5 +233,21 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
 //                    MyToast.showToast(mActivity, "执行加载更多方法");
             getPersenter().sendHomeResult(20, page);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            //两秒之内按返回键就会退出
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                MyToast.showToast(mActivity, "再次点击退出程序");
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

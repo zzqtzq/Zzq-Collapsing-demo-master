@@ -25,7 +25,6 @@
             app:expandedTitleMarginStart="20dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-
             <ImageView
                 android:id="@+id/iv_content"
                 android:layout_width="match_parent"
@@ -59,6 +58,8 @@
             android:id="@+id/my_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbarThumbVertical="@drawable/my_bar_style"
+            android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </android.support.v4.widget.SwipeRefreshLayout>
 

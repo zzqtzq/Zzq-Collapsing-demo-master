@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Zzq-Collapsing-demo-master</string>
     <string name="skip_welcome">跳过</string>
+    <string name="menu_search">查找</string>
+    <string name="menu_notifications">通知</string>
+    <string name="menu_settings">设置</string>
+    <string name="menu_about_us">关于</string>
+    <string name="menu_about_shars">分享</string>
+    <string name="action_save">save</string>
+    <string name="action_share">share</string>
 </resources>

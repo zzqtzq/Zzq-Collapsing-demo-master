@@ -3,7 +3,11 @@ package com.zzq.zzq_collapsing_demo_master.api;
 
 import com.zzq.zzq_collapsing_demo_master.entity.WelfareEntity;
 
+import okhttp3.RequestBody;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 /**
@@ -28,8 +32,18 @@ public interface HttpApi {
     rx.Observable<WelfareEntity> getHomeResult(@Path("pageSize") int pageSize, @Path("page") int page);
 
     @GET("data/福利/{pageSize}/{page}")
-    rx.Observable<WelfareEntity> getWelcomeGirl(@Path("pageSize") int pageSize,@Path("page") int page);
+    rx.Observable<WelfareEntity> getWelcomeGirl(@Path("pageSize") int pageSize, @Path("page") int page);
 //    rx.Observable<ApiResponse<HomeEntity>> getHomeInfo(@Query("loginUserId") Long loginUserId);
+
+    /*上传文件*/
+    @Multipart
+    @POST("wooforbes/updateHead")
+    rx.Observable<WelfareEntity> uploadImage(@Part("id") RequestBody id, @Part("headurl") RequestBody headurl);
+
+
+    @POST("/file")
+    @Multipart
+    rx.Observable<WelfareEntity> uploadFile(@Part("file\"; filename=\"avatar.png\"") RequestBody file);
 
     /**
      * 首页展示

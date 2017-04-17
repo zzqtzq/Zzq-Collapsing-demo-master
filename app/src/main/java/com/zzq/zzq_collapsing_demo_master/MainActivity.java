@@ -1,5 +1,6 @@
 package com.zzq.zzq_collapsing_demo_master;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -7,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -126,11 +126,16 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
     //    String[] a = {"zzq", "tdos"};
 //    WelfareEntity welfareEntity = new WelfareEntity();//实例化实体类
     //    List<ResultsBean>
-    List<WelfareEntity.ResultsBean> resultsBeenList = new ArrayList<WelfareEntity.ResultsBean>();
+    ArrayList<WelfareEntity.ResultsEntity> resultsBeenList;
 
+    /**
+     * 接收请求返回数据方法
+     *
+     * @param mWelfareEntity
+     */
     @Override
     public void getHomeResult(WelfareEntity mWelfareEntity) {
-
+        resultsBeenList = new ArrayList<WelfareEntity.ResultsEntity>();
 //        welfareEntity.setResults(mWelfareEntity.getResults());//赋值
         mSwipeRefreshLayout.setRefreshing(false);
         if (mWelfareEntity != null) {
@@ -140,7 +145,7 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
 //            mRecyclerView.setAdapter(myHomeAdapter);
             if (state == false) {
 
-                List<WelfareEntity.ResultsBean> list = (List<WelfareEntity.ResultsBean>) StringUtils.arrayList((Object[]) aCache.getAsObject("mWelfareEntity"));
+                List<WelfareEntity.ResultsEntity> list = (List<WelfareEntity.ResultsEntity>) StringUtils.arrayList((Object[]) aCache.getAsObject("mWelfareEntity"));
                 MyToast.showToast(mActivity, "从缓存中获取的数据:" + list.size());
                 page = 1;
                 //如果是刷新  直接传递最后返回的实体
@@ -163,11 +168,22 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
                 }
             }
 
+            /**
+             * 点击Item 页面跳转
+             */
             myHomeAdapter.setOnMyHomeRcViewItemOnClickListener(new MyHomeAdapter.OnMyHomeRcViewItemOnClickListener() {
                 @Override
                 public void onMHRCViewItemOnclick(View view, String data, int position) {
-                    Log.i("", "回调结果:" + data + "|||=" + position);
-                    Toast.makeText(mActivity, "" + position, Toast.LENGTH_SHORT).show();
+//                    Log.i("", "回调结果:" + data + "|||=" + position);
+//                    Toast.makeText(mActivity, "" + position, Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(mActivity, ShowPhotoActivity.class);
+                    intent.putParcelableArrayListExtra("girls", resultsBeenList);
+                    intent.putExtra("current", position);
+//                    ActivityOptionsCompat options = ActivityOptionsCompat.makeScaleUpAnimation(view, holder.itemView.getWidth() / 2, holder.itemView.getHeight() / 2, 0, 0);
+//                    startActivity(intent, options.toBundle());
+                    startActivity(intent);
+//                    startActivity(new Intent(MainActivity.this, ShowPhotoActivity.class));
                 }
             });
 //            try {
@@ -235,6 +251,13 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
         }
     }
 
+    /**
+     * 关闭页面退出程序
+     *
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -249,5 +272,11 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        resultsBeenList.clear();
     }
 }

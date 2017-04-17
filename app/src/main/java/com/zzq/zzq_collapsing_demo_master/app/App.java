@@ -45,4 +45,8 @@ public class App extends Application {
         cacheDir = Glide.getPhotoCacheDir(context);
     }
 
+    public static App getIntstance() {
+        return appContext;
+    }
+
 }

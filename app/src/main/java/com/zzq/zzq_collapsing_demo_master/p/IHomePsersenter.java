@@ -27,6 +27,7 @@ public class IHomePsersenter extends IBasePsersenter<AHomeContract.View> impleme
     @Override
     public void sendHomeResult(int pageSize, int page) {
         showLoading();
+        //Rxjava + refo
         Subscription subscription = mHttpApi.getHomeResult(pageSize, page)
                 .compose(SchedulersCompat.applyIoSchedulers())
                 .compose(RxResultHelper.handleResult()).subscribe(new Observer<WelfareEntity>() {

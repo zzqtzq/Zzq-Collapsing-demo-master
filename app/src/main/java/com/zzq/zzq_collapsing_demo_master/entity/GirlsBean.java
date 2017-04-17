@@ -6,11 +6,9 @@ import android.os.Parcelable;
 import java.util.List;
 
 /**
- * Created by 志强 on 2017.3.8.
+ * Created by oracleen on 2016/6/29.
  */
-
-public class WelfareEntity {
-
+public class GirlsBean {
 
     /**
      * error : false
@@ -164,7 +162,7 @@ public class WelfareEntity {
             this.who = in.readString();
         }
 
-        public static final Parcelable.Creator<ResultsEntity> CREATOR = new Parcelable.Creator<ResultsEntity>() {
+        public static final Creator<ResultsEntity> CREATOR = new Creator<ResultsEntity>() {
             @Override
             public ResultsEntity createFromParcel(Parcel source) {
                 return new ResultsEntity(source);

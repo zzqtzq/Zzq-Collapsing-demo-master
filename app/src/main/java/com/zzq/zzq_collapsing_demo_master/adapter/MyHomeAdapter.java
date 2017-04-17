@@ -21,12 +21,12 @@ import java.util.List;
 public class MyHomeAdapter extends RecyclerView.Adapter<MyHomeAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<WelfareEntity.ResultsBean> welfareEntity;
+    private List<WelfareEntity.ResultsEntity> welfareEntity;
     private View view;
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
 
-    public MyHomeAdapter(Context mContext, List<WelfareEntity.ResultsBean> welfareEntity) {
+    public MyHomeAdapter(Context mContext, List<WelfareEntity.ResultsEntity> welfareEntity) {
         this.mContext = mContext;
         this.welfareEntity = welfareEntity;
     }

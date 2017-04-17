@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.zzq.zzq_collapsing_demo_master.base.RxBaseActivity;
 import com.zzq.zzq_collapsing_demo_master.p.IWelcomePsersenter;
-import com.zzq.zzq_collapsing_demo_master.utils.MyToast;
 import com.zzq.zzq_collapsing_demo_master.v.AWelcomeContract;
 
 /**
@@ -114,8 +113,7 @@ public class WelcomeActivity extends RxBaseActivity<IWelcomePsersenter> implemen
     }
 
     private void initAnim(String imgUrl) {
-        Log.i("", "声明周期执行:" + "initAnim方法");
-        MyToast.showToast(mActivity, "initAnim");
+
         ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.1f, 1.0f, 1.1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         scaleAnimation.setFillAfter(true);
         scaleAnimation.setDuration(8000);

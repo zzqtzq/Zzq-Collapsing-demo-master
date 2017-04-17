@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.okhttp.OkHttpUrlLoader;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.squareup.okhttp.OkHttpClient;
+import com.zzq.zzq_collapsing_demo_master.app.execption.LocalFileHandler;
 import com.zzq.zzq_collapsing_demo_master.utils.ContextUtil;
 
 import java.io.File;
@@ -27,6 +28,8 @@ public class App extends Application {
         appContext = this;
         ContextUtil.init(this);
         setupGlide(appContext);
+        //配置程序异常退出处理
+        Thread.setDefaultUncaughtExceptionHandler(new LocalFileHandler(this));
     }
 
     public static App getAppContext() {

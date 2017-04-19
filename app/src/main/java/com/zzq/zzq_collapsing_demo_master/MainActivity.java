@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -146,7 +148,6 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
             if (state == false) {
 
                 List<WelfareEntity.ResultsEntity> list = (List<WelfareEntity.ResultsEntity>) StringUtils.arrayList((Object[]) aCache.getAsObject("mWelfareEntity"));
-                MyToast.showToast(mActivity, "从缓存中获取的数据:" + list.size());
                 page = 1;
                 //如果是刷新  直接传递最后返回的实体
                 if (resultsBeenList.size() > 0) {
@@ -180,8 +181,9 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
                     Intent intent = new Intent(mActivity, ShowPhotoActivity.class);
                     intent.putParcelableArrayListExtra("girls", resultsBeenList);
                     intent.putExtra("current", position);
-//                    ActivityOptionsCompat options = ActivityOptionsCompat.makeScaleUpAnimation(view, holder.itemView.getWidth() / 2, holder.itemView.getHeight() / 2, 0, 0);
-//                    startActivity(intent, options.toBundle());
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, view, "flag");
+                    ActivityCompat.startActivity(mActivity, intent, options.toBundle());
+//                   startActivity(intent, options.toBundle());
                     startActivity(intent);
 //                    startActivity(new Intent(MainActivity.this, ShowPhotoActivity.class));
                 }

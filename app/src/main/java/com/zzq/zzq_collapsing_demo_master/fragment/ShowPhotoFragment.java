@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +63,7 @@ public class ShowPhotoFragment extends BaseFragment implements ViewPager.OnPageC
         view_pager.setAdapter(mAdapter);
         view_pager.setCurrentItem(current);
         view_pager.setOnPageChangeListener(this);
+        ViewCompat.setTransitionName(view_pager, "image");
 
     }
 

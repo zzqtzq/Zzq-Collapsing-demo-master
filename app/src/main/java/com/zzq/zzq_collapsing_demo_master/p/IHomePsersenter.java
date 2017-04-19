@@ -26,7 +26,7 @@ public class IHomePsersenter extends IBasePsersenter<AHomeContract.View> impleme
      */
     @Override
     public void sendHomeResult(int pageSize, int page) {
-        showLoading();
+//        showLoading();
         //Rxjava + refo
         Subscription subscription = mHttpApi.getHomeResult(pageSize, page)
                 .compose(SchedulersCompat.applyIoSchedulers())
@@ -34,13 +34,13 @@ public class IHomePsersenter extends IBasePsersenter<AHomeContract.View> impleme
                     @Override
                     public void onCompleted() {
                         //执行中
-                        LoadingDiaogDismiss();
+//                        LoadingDiaogDismiss();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         //错误反馈
-                        LoadingDiaogDismiss();
+//                        LoadingDiaogDismiss();
                         MyToast.showToast(mActivity, e.getMessage().toString());
                     }
 

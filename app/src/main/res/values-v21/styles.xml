@@ -12,4 +12,10 @@
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:colorAccent">@color/colorAccent</item>
     </style>
+
+
+    <style name="ViewerTheme" parent="ViewerThemeBase">
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
 </resources>

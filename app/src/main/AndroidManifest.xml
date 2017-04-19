@@ -40,7 +40,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ShowPhotoActivity">
+        <activity
+            android:name=".ShowPhotoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ViewerTheme">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

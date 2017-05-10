@@ -9,9 +9,10 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.zzq.zzq_collapsing_demo_master.R;
 import com.zzq.zzq_collapsing_demo_master.entity.WelfareEntity;
-import com.zzq.zzq_collapsing_demo_master.widget.PinchImageView;
 
 import java.util.ArrayList;
+
+import uk.co.senab.photoview.PhotoView;
 
 /**
  * Created by 志强 on 2017.4.14.
@@ -48,7 +49,7 @@ public class GirlAdapter extends PagerAdapter {
     public View instantiateItem(ViewGroup container, int position) {
         final String imageUrl = mDatas.get(position).getUrl();
         View view = layoutInflater.inflate(R.layout.item_girl_detail, container, false);
-        PinchImageView imageView = (PinchImageView) view.findViewById(R.id.img);
+        PhotoView imageView = (PhotoView) view.findViewById(R.id.img);
         Glide.with(mContext)
                 .load(imageUrl)
                 .thumbnail(0.2f)

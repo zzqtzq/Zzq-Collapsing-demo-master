@@ -44,6 +44,7 @@ public class MyHomeAdapter extends RecyclerView.Adapter<MyHomeAdapter.ViewHolder
 
         holder.itemView.setTag(welfareEntity.get(position).getUrl());
         holder.itemView.setId(position);
+        holder.home_item_cd_img.setId(position);
 
 //        Glide.with(mContext).load(welfareEntity.get(position).getUrl()).error(R.mipmap.ic_launcher).into(holder.home_item_cd_img);
 //        Glide.with(mContext).load(aboutEntity.getStories().get(position).getImages().get(0)).error(R.drawable.ic_link_white_24dp).into(holder.pic);
@@ -55,8 +56,12 @@ public class MyHomeAdapter extends RecyclerView.Adapter<MyHomeAdapter.ViewHolder
     private OnMyHomeRcViewItemOnClickListener mOnMyHomeRcViewItemOnClickListener;
 
     public static interface OnMyHomeRcViewItemOnClickListener {
-        void onMHRCViewItemOnclick(View view, String data, int position);
+        void onMHRCViewItemOnclick(View itemView, View view, String data, int position);
     }
+//    public static interface OnMyHomeRcViewItemOnClickListener {
+//        void onMHRCViewItemOnclick(ViewHolder viewHolder);
+//    }
+
 
     public void setOnMyHomeRcViewItemOnClickListener(OnMyHomeRcViewItemOnClickListener listener) {
         this.mOnMyHomeRcViewItemOnClickListener = listener;
@@ -81,7 +86,7 @@ public class MyHomeAdapter extends RecyclerView.Adapter<MyHomeAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     if (mOnMyHomeRcViewItemOnClickListener != null) {
-                        mOnMyHomeRcViewItemOnClickListener.onMHRCViewItemOnclick(v, (String) v.getTag(), v.getId());
+                        mOnMyHomeRcViewItemOnClickListener.onMHRCViewItemOnclick(itemView, v, (String) v.getTag(), v.getId());
                     }
                 }
             });

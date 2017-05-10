@@ -8,4 +8,5 @@
     <string name="menu_about_shars">分享</string>
     <string name="action_save">save</string>
     <string name="action_share">share</string>
+    <string name="permission_required">Write permission is required for saving photo.</string>
 </resources>

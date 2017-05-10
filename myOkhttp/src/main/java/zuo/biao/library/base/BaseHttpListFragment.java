@@ -14,6 +14,9 @@ limitations under the License.*/
 
 package zuo.biao.library.base;
 
+import android.view.View;
+import android.widget.BaseAdapter;
+
 import java.util.List;
 
 import zuo.biao.library.interfaces.OnReachViewBorderListener;
@@ -21,8 +24,6 @@ import zuo.biao.library.interfaces.OnStopLoadListener;
 import zuo.biao.library.manager.HttpManager;
 import zuo.biao.library.ui.xlistview.XListView;
 import zuo.biao.library.ui.xlistview.XListView.IXListViewListener;
-import android.view.View;
-import android.widget.BaseAdapter;
 
 /**基础http获取列表的Fragment
  * @author Lemon
@@ -70,13 +71,6 @@ implements HttpManager.OnHttpResponseListener, IXListViewListener, OnStopLoadLis
 
 
 
-
-
-
-
-
-
-
 	// Data数据区(存在数据获取或处理代码，但不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	@Override
@@ -94,14 +88,6 @@ implements HttpManager.OnHttpResponseListener, IXListViewListener, OnStopLoadLis
 
 
 	// Data数据区(存在数据获取或处理代码，但不存在事件监听代码)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-
-
-
-
-
-
 
 
 	// Event事件区(只要存在事件监听代码就是)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

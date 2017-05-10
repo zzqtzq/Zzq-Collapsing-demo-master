@@ -1,7 +1,9 @@
 package com.zzq.zzq_collapsing_demo_master;
 
 import android.content.Intent;
+import android.databinding.ObservableArrayList;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
@@ -10,6 +12,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.transition.ChangeBounds;
+import android.transition.ChangeImageTransform;
+import android.transition.TransitionSet;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +24,7 @@ import android.widget.Toast;
 
 import com.zzq.zzq_collapsing_demo_master.adapter.MyHomeAdapter;
 import com.zzq.zzq_collapsing_demo_master.base.RxBaseActivity;
+import com.zzq.zzq_collapsing_demo_master.entity.Image;
 import com.zzq.zzq_collapsing_demo_master.entity.WelfareEntity;
 import com.zzq.zzq_collapsing_demo_master.p.IHomePsersenter;
 import com.zzq.zzq_collapsing_demo_master.utils.ACache;
@@ -33,7 +39,7 @@ import java.util.List;
 public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHomeContract.View, SwipeRefreshLayout.OnRefreshListener, RefreshRecyclerView.OnLoadMoreListener {
     //    ABoutContract
 
-    private CollapsingToolbarLayout collapsingToolbar;// = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+    private CollapsingToolbarLayout collapsingToolbar;//
     private Toolbar toolbar;
     private RefreshRecyclerView mRecyclerView;
     private MyHomeAdapter myHomeAdapter;
@@ -41,6 +47,7 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
     private ACache aCache;
     boolean isLoading;
     private long exitTime = 0;
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +76,26 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
 
     @Override
     public void initView() {
+        setUpWindowTrisience();
+    }
+
+    private void setUpWindowTrisience() {
+        TransitionSet mtransitionset = new TransitionSet();
+        mtransitionset.addTransition(new ChangeBounds());
+        mtransitionset.addTransition(new ChangeImageTransform());
+//        mtransitionset.addTransition(new Fade());
+        mtransitionset.setDuration(250);
+        getWindow().setEnterTransition(mtransitionset);
+        getWindow().setExitTransition(mtransitionset);
+        getWindow().setSharedElementEnterTransition(mtransitionset);
+        getWindow().setSharedElementExitTransition(mtransitionset);
+        getWindow().setAllowEnterTransitionOverlap(false);
 
     }
 
     @Override
     protected void initDataAndLoadData() {
+//        images = MrSharedState.getInstance().getImages();
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.home_swRefresh_view);
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -129,6 +151,7 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
 //    WelfareEntity welfareEntity = new WelfareEntity();//实例化实体类
     //    List<ResultsBean>
     ArrayList<WelfareEntity.ResultsEntity> resultsBeenList;
+    private ObservableArrayList<Image> images;
 
     /**
      * 接收请求返回数据方法
@@ -146,7 +169,6 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
 //            myHomeAdapter = new MyHomeAdapter(mActivity, welfareEntity);
 //            mRecyclerView.setAdapter(myHomeAdapter);
             if (state == false) {
-
                 List<WelfareEntity.ResultsEntity> list = (List<WelfareEntity.ResultsEntity>) StringUtils.arrayList((Object[]) aCache.getAsObject("mWelfareEntity"));
                 page = 1;
                 //如果是刷新  直接传递最后返回的实体
@@ -169,35 +191,52 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
                 }
             }
 
-            /**
-             * 点击Item 页面跳转
-             */
             myHomeAdapter.setOnMyHomeRcViewItemOnClickListener(new MyHomeAdapter.OnMyHomeRcViewItemOnClickListener() {
                 @Override
-                public void onMHRCViewItemOnclick(View view, String data, int position) {
+                public void onMHRCViewItemOnclick(View itemView, View view, String data, int position) {
 //                    Log.i("", "回调结果:" + data + "|||=" + position);
 //                    Toast.makeText(mActivity, "" + position, Toast.LENGTH_SHORT).show();
-
+//============================================================================
                     Intent intent = new Intent(mActivity, ShowPhotoActivity.class);
                     intent.putParcelableArrayListExtra("girls", resultsBeenList);
                     intent.putExtra("current", position);
-                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, view, "flag");
+//                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, view.findViewById(R.id.home_item_cd_img), "flag");
+                    final ActivityOptionsCompat options;
+
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                MainActivity.this, itemView, "flag");
+                    } else {
+                        options = ActivityOptionsCompat.makeScaleUpAnimation(
+                                itemView, 0, 0, itemView.getWidth(), itemView.getHeight());
+                    }
                     ActivityCompat.startActivity(mActivity, intent, options.toBundle());
-//                   startActivity(intent, options.toBundle());
-                    startActivity(intent);
+//============================================================================
+
+//                    startActivity(intent, options.toBundle());
+//                    startActivity(intent);
 //                    startActivity(new Intent(MainActivity.this, ShowPhotoActivity.class));
+
+
+//                    final Intent intent = new Intent(MainActivity.this, ViewerActivity.class);
+//                    intent.putExtra("index", position);
+//                    intent.putParcelableArrayListExtra("girls", resultsBeenList);
+//
+//                    final ActivityOptionsCompat options;
+//
+//                    if (Build.VERSION.SDK_INT >= 21) {
+//                        options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                                MainActivity.this, itemView, "sharname");
+//                    } else {
+//                        options = ActivityOptionsCompat.makeScaleUpAnimation(
+//                                itemView, 0, 0, itemView.getWidth(), itemView.getHeight());
+//                    }
+//
+//                    startActivity(intent, options.toBundle());
+
+
                 }
             });
-//            try {
-//                WelfareEntity str = (WelfareEntity) aCache.getAsObject("mWelfareEntity");
-//                Log.i("", "1========>" + str);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                Log.i("", "========>" + e.getMessage());
-//            }
-//            Log.i("", "========>" + welfareEntity.getResults().size());
-
-//            Toast.makeText(mActivity, "" + mWelfareEntity.getResults().get(0).getUrl(), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(mActivity, "null", Toast.LENGTH_SHORT).show();
         }

@@ -20,21 +20,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.zzq.zzq_collapsing_demo_master.adapter.MyHomeAdapter;
 import com.zzq.zzq_collapsing_demo_master.base.RxBaseActivity;
 import com.zzq.zzq_collapsing_demo_master.entity.Image;
 import com.zzq.zzq_collapsing_demo_master.entity.WelfareEntity;
 import com.zzq.zzq_collapsing_demo_master.p.IHomePsersenter;
 import com.zzq.zzq_collapsing_demo_master.utils.ACache;
+import com.zzq.zzq_collapsing_demo_master.utils.LogUtils;
 import com.zzq.zzq_collapsing_demo_master.utils.MyToast;
-import com.zzq.zzq_collapsing_demo_master.utils.StringUtils;
 import com.zzq.zzq_collapsing_demo_master.v.AHomeContract;
 import com.zzq.zzq_collapsing_demo_master.widget.refresh.RefreshRecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHomeContract.View, SwipeRefreshLayout.OnRefreshListener, RefreshRecyclerView.OnLoadMoreListener {
     //    ABoutContract
@@ -47,7 +49,8 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
     private ACache aCache;
     boolean isLoading;
     private long exitTime = 0;
-    ;
+    private ImageView iv_content;
+    private String homeImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,8 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
         setContentView(getLayoutId());
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         aCache = ACache.get(MainActivity.this);
+        homeImageUrl = getIntent().getStringExtra("homeImageUrl");
+
     }
 
     @Override
@@ -64,6 +69,7 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
 
     @Override
     protected void initVariables() {
+
 //        WelfareEntity welfareEntity = (WelfareEntity) aCache.getAsObject("mWelfareEntity");
 //        if (welfareEntity == null) {
         getPersenter().sendHomeResult(20, page);
@@ -90,7 +96,6 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
         getWindow().setSharedElementEnterTransition(mtransitionset);
         getWindow().setSharedElementExitTransition(mtransitionset);
         getWindow().setAllowEnterTransitionOverlap(false);
-
     }
 
     @Override
@@ -100,6 +105,7 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mRecyclerView = (RefreshRecyclerView) findViewById(R.id.my_recycler_view);
+        iv_content = (ImageView) findViewById(R.id.iv_content);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -137,6 +143,11 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mRecyclerView.setOnLoadMoreListener(this);
+        if (homeImageUrl != null) {
+            Glide.with(mActivity).load(homeImageUrl).into(iv_content);
+        } else {
+            MyToast.showToast(mActivity, "加载默认图片");
+        }
     }
 
     int page = 1;
@@ -150,7 +161,7 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
     //    String[] a = {"zzq", "tdos"};
 //    WelfareEntity welfareEntity = new WelfareEntity();//实例化实体类
     //    List<ResultsBean>
-    ArrayList<WelfareEntity.ResultsEntity> resultsBeenList;
+    ArrayList<WelfareEntity.ResultsEntity> resultsBeenList = new ArrayList<>();
     private ObservableArrayList<Image> images;
 
     /**
@@ -158,18 +169,19 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
      *
      * @param mWelfareEntity
      */
+
+    boolean state = false;
+
     @Override
     public void getHomeResult(WelfareEntity mWelfareEntity) {
-        resultsBeenList = new ArrayList<WelfareEntity.ResultsEntity>();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(mWelfareEntity);
+        LogUtils.i("打印图片json", "json:" + json);
 //        welfareEntity.setResults(mWelfareEntity.getResults());//赋值
         mSwipeRefreshLayout.setRefreshing(false);
         if (mWelfareEntity != null) {
-            aCache.put("mWelfareEntity", mWelfareEntity.getResults().toArray());
-//            aCache.put("mWelfareEntity", (JSONArray) mWelfareEntity.getResults());
-//            myHomeAdapter = new MyHomeAdapter(mActivity, welfareEntity);
-//            mRecyclerView.setAdapter(myHomeAdapter);
-            if (state == false) {
-                List<WelfareEntity.ResultsEntity> list = (List<WelfareEntity.ResultsEntity>) StringUtils.arrayList((Object[]) aCache.getAsObject("mWelfareEntity"));
+            if (!state) {
                 page = 1;
                 //如果是刷新  直接传递最后返回的实体
                 if (resultsBeenList.size() > 0) {
@@ -190,7 +202,6 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
                     mRecyclerView.notifyData();
                 }
             }
-
             myHomeAdapter.setOnMyHomeRcViewItemOnClickListener(new MyHomeAdapter.OnMyHomeRcViewItemOnClickListener() {
                 @Override
                 public void onMHRCViewItemOnclick(View itemView, View view, String data, int position) {
@@ -255,13 +266,12 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
                 //点击了返回箭头
                 break;
             case R.id.about://作者
-                new AlertDialog.Builder(this).setMessage("Auther:zzqtdos\nEmail:zzqtdos@gmail.com\n敬请期待后续功能").show();
+                new AlertDialog.Builder(this).setMessage("作者:zzqtdos\nEmail:zzqtdos@gmail.com\n敬请期待后续功能").show();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    boolean state = false;
 
     /**
      * 刷新操作
@@ -287,7 +297,7 @@ public class MainActivity extends RxBaseActivity<IHomePsersenter> implements AHo
             }
         } else {
             page++;
-//                    MyToast.showToast(mActivity, "执行加载更多方法");
+//              MyToast.showToast(mActivity, "执行加载更多方法");
             getPersenter().sendHomeResult(20, page);
         }
     }

@@ -25,7 +25,8 @@ public class WelcomeActivity extends RxBaseActivity<IWelcomePsersenter> implemen
 
     private ImageView splash;
     private Button btn_wel_skip_Button;
-//    private ScaleAnimation scaleAnimation;
+    //    private ScaleAnimation scaleAnimation;
+    private String url;
 
     @Override
     public int getLayoutId() {
@@ -93,6 +94,7 @@ public class WelcomeActivity extends RxBaseActivity<IWelcomePsersenter> implemen
     @Override
     public void getWelcomeResult(String result) {
         Log.i("", "声明周期执行:" + "getWelcomeResult方法");
+        url = result;
         initAnim(result);
 
         btn_wel_skip_Button.setVisibility(View.VISIBLE);
@@ -131,7 +133,9 @@ public class WelcomeActivity extends RxBaseActivity<IWelcomePsersenter> implemen
                 btn_wel_skip_Button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(mActivity, MainActivity.class));
+                        Intent intent = new Intent(mActivity, MainActivity.class);
+                        intent.putExtra("homeImageUrl", url);
+                        startActivity(intent);
                         finish();
                     }
                 });
@@ -139,7 +143,9 @@ public class WelcomeActivity extends RxBaseActivity<IWelcomePsersenter> implemen
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                startActivity(new Intent(mActivity, MainActivity.class));
+                Intent intent = new Intent(mActivity, MainActivity.class);
+                intent.putExtra("homeImageUrl", url);
+                startActivity(intent);
                 finish();
 //                ActivityManager.getInstance().finishActivity();
             }
